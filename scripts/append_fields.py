@@ -192,6 +192,28 @@ if __name__ == "__main__":
     print(f"Input:      {CSV_PATH}")
     print(f"Model:      {MODEL}")
     print(f"Save every: {SAVE_EVERY} rows")
+    print(f"{'='*60}")
+
+    # Verify API key is set
+    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    if not api_key:
+        print("ERROR: ANTHROPIC_API_KEY is not set!")
+        exit(1)
+    print(f"API key:    ...{api_key[-4:]}")
+
+    # Quick connectivity test
+    print("Testing API connection...")
+    try:
+        test = client.messages.create(
+            model=MODEL,
+            max_tokens=10,
+            messages=[{"role": "user", "content": "Say OK"}]
+        )
+        print(f"API test:   OK ({test.content[0].text.strip()})")
+    except Exception as e:
+        print(f"API test FAILED: {type(e).__name__}: {e}")
+        exit(1)
+
     print(f"{'='*60}\n")
 
     df = pd.read_csv(CSV_PATH)
