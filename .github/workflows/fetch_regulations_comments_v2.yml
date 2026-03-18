@@ -3,6 +3,9 @@ name: Fetch Regulations.gov Comments V2
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   fetch-comments:
     runs-on: ubuntu-latest
