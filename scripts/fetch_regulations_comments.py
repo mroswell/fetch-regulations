@@ -6,7 +6,6 @@ import time
 
 # ── Settings ──────────────────────────────────────────────────────────────────
 DOCKET_ID   = "CDC-2026-0199"
-VERSION     = "v2"
 SAVE_EVERY  = 20   # save progress every N comments
 SLEEP_SECS  = 4     # seconds between detail requests
 # ──────────────────────────────────────────────────────────────────────────────
@@ -14,7 +13,10 @@ SLEEP_SECS  = 4     # seconds between detail requests
 BASE_URL            = "https://api.regulations.gov/v4"
 REGULATIONS_API_KEY = os.environ.get("REGULATIONS_API_KEY", "DEMO_KEY")
 HEADERS             = {"Accept": "application/json", "X-Api-Key": REGULATIONS_API_KEY}
-OUTPUT_CSV          = f"detailed_comments_{DOCKET_ID}_{VERSION}.csv"
+
+# Output to data/csv/ relative to the repo root (parent of scripts/)
+REPO_ROOT  = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUTPUT_CSV = os.path.join(REPO_ROOT, "data", "csv", f"comments_{DOCKET_ID}.csv")
 
 def get_documents(docket_id):
     url    = f"{BASE_URL}/documents"
@@ -102,13 +104,13 @@ def extract_attachment_urls(response_json):
 
 def save_progress(records, output_csv):
     df = pd.DataFrame(records)
+    os.makedirs(os.path.dirname(output_csv), exist_ok=True)
     df.to_csv(output_csv, index=False)
-    print(f"  💾 Progress saved: {len(records)} records to {output_csv}")
+    print(f"  Progress saved: {len(records)} records to {output_csv}")
 
 if __name__ == "__main__":
     print(f"\n{'='*60}")
     print(f"Docket:     {DOCKET_ID}")
-    print(f"Version:    {VERSION}")
     print(f"Output:     {OUTPUT_CSV}")
     print(f"Pace:       {SLEEP_SECS}s between requests (~{3600//SLEEP_SECS}/hour)")
     print(f"Auto-save:  every {SAVE_EVERY} comments")
@@ -213,7 +215,7 @@ if __name__ == "__main__":
             if request_count % 50 == 0:
                 print(f"  [{request_count} requests] Rate limit: {remaining}/{limit} remaining")
             if 0 < remaining < 50:
-                print(f"  ⚠️  WARNING: Only {remaining} requests remaining!")
+                print(f"  WARNING: Only {remaining} requests remaining!")
 
             # ── Periodic save ──────────────────────────────────────────────────
             if new_this_run % SAVE_EVERY == 0:
@@ -228,6 +230,6 @@ if __name__ == "__main__":
     # ── Final save ─────────────────────────────────────────────────────────────
     if detailed_comments:
         save_progress(detailed_comments, OUTPUT_CSV)
-        print(f"\n✅ Done! {len(detailed_comments)} total records in {OUTPUT_CSV}")
+        print(f"\nDone! {len(detailed_comments)} total records in {OUTPUT_CSV}")
     else:
         print("\nNo comments to save.")

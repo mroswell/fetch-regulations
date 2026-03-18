@@ -1,4 +1,4 @@
-name: Fetch Regulations.gov Comments v2
+name: Fetch Regulations.gov Comments
 
 on:
   workflow_dispatch:
@@ -26,21 +26,21 @@ jobs:
       - name: Run script
         env:
           REGULATIONS_API_KEY: ${{ secrets.REGULATIONS_API_KEY }}
-        run: python fetch_regulations_comments_v2.py
+        run: python scripts/fetch_regulations_comments.py
 
       - name: Upload CSV as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: detailed-comments-v2
-          path: detailed_comments_CDC-2026-0199_v2.csv
+          name: comments-csv
+          path: data/csv/comments_CDC-2026-0199.csv
 
       - name: Commit CSV to repo
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git pull --rebase
-          git add detailed_comments_CDC-2026-0199_v2.csv
-          git diff --staged --quiet || git commit -m "Update detailed_comments v2 [skip ci]"
+          git add data/csv/comments_CDC-2026-0199.csv
+          git diff --staged --quiet || git commit -m "Update comments CSV [skip ci]"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
