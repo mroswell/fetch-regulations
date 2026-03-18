@@ -120,10 +120,10 @@ if __name__ == "__main__":
     if os.path.exists(OUTPUT_CSV):
         existing_df = pd.read_csv(OUTPUT_CSV)
         filled_rows = existing_df[
-            existing_df["Comment"].notna() & (existing_df["Comment"] != "")
+            existing_df["comment"].notna() & (existing_df["comment"] != "")
         ]
         if not filled_rows.empty:
-            start_from_id     = filled_rows["Comment ID"].iloc[-1]
+            start_from_id     = filled_rows["comment_id"].iloc[-1]
             detailed_comments = existing_df.to_dict("records")
             print(f"Resuming after comment ID: {start_from_id}")
             print(f"({len(filled_rows)} records already saved)")
@@ -172,37 +172,37 @@ if __name__ == "__main__":
             attachment_urls             = extract_attachment_urls(response_json)
 
             detailed_comments.append({
-                "Comment ID":           comment_id,
-                "Tracking Number":      attributes.get("trackingNbr"),
-                "Title":                attributes.get("title"),
-                "Document ID":          attributes.get("documentId"),
-                "Docket ID":            attributes.get("docketId"),
-                "Comment On ID":        attributes.get("commentOnId"),
-                "Document Type":        attributes.get("documentType"),
-                "Document Subtype":     attributes.get("subtype"),
-                "Agency ID":            attributes.get("agencyId"),
-                "Posted Date":          attributes.get("postedDate"),
-                "Received Date":        attributes.get("receiveDate"),
-                "Postmark Date":        attributes.get("postmarkDate"),
-                "Withdrawn":            attributes.get("withdrawn"),
-                "Restrict Reason Type": attributes.get("restrictReasonType"),
-                "Restrict Reason":      attributes.get("restrictReason"),
-                "Reason Withdrawn":     attributes.get("reasonWithdrawn"),
-                "First Name":           attributes.get("firstName"),
-                "Last Name":            attributes.get("lastName"),
-                "City":                 attributes.get("city"),
-                "State or Province":    attributes.get("stateProvinceRegion"),
-                "Zip":                  attributes.get("zip"),
-                "Country":              attributes.get("country"),
-                "Organization":         attributes.get("organization"),
-                "Gov Agency":           attributes.get("govAgency"),
-                "Gov Agency Type":      attributes.get("govAgencyType"),
-                "Legacy ID":            attributes.get("legacyId"),
-                "Page Count":           attributes.get("pageCount"),
-                "Doc Abstract":         attributes.get("docAbstract"),
-                "Comment":              attributes.get("comment"),
-                "Attachment URLs":      attachment_urls,
-                "URL":                  detail.get("links", {}).get("self") if detail else None,
+                "comment_id":           comment_id,
+                "tracking_number":      attributes.get("trackingNbr"),
+                "title":                attributes.get("title"),
+                "document_id":          attributes.get("documentId"),
+                "docket_id":            attributes.get("docketId"),
+                "comment_on_id":        attributes.get("commentOnId"),
+                "document_type":        attributes.get("documentType"),
+                "document_subtype":     attributes.get("subtype"),
+                "agency_id":            attributes.get("agencyId"),
+                "posted_date":          attributes.get("postedDate"),
+                "received_date":        attributes.get("receiveDate"),
+                "postmark_date":        attributes.get("postmarkDate"),
+                "withdrawn":            attributes.get("withdrawn"),
+                "restrict_reason_type": attributes.get("restrictReasonType"),
+                "restrict_reason":      attributes.get("restrictReason"),
+                "reason_withdrawn":     attributes.get("reasonWithdrawn"),
+                "first_name":           attributes.get("firstName"),
+                "last_name":            attributes.get("lastName"),
+                "city":                 attributes.get("city"),
+                "state_or_province":    attributes.get("stateProvinceRegion"),
+                "zip":                  attributes.get("zip"),
+                "country":              attributes.get("country"),
+                "organization":         attributes.get("organization"),
+                "gov_agency":           attributes.get("govAgency"),
+                "gov_agency_type":      attributes.get("govAgencyType"),
+                "legacy_id":            attributes.get("legacyId"),
+                "page_count":           attributes.get("pageCount"),
+                "doc_abstract":         attributes.get("docAbstract"),
+                "comment":              attributes.get("comment"),
+                "attachment_urls":      attachment_urls,
+                "url":                  detail.get("links", {}).get("self") if detail else None,
             })
 
             request_count += 1
