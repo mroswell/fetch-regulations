@@ -1,0 +1,46 @@
+name: Append Analysis Fields
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  append-fields:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pandas anthropic python-dotenv tqdm
+
+      - name: Run script
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python scripts/append_fields.py
+
+      - name: Upload CSV as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: comments-with-analysis
+          path: data/csv/comments_CDC-2026-0199.csv
+
+      - name: Commit CSV to repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase
+          git add data/csv/comments_CDC-2026-0199.csv
+          git diff --staged --quiet || git commit -m "Update analysis fields [skip ci]"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
