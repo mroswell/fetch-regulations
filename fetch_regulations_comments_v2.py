@@ -7,8 +7,8 @@ import time
 # ── Settings ──────────────────────────────────────────────────────────────────
 DOCKET_ID   = "CDC-2026-0199"
 VERSION     = "v2"
-SAVE_EVERY  = 100   # save progress every N comments
-SLEEP_SECS  = 8     # seconds between detail requests (~450/hour)
+SAVE_EVERY  = 20   # save progress every N comments
+SLEEP_SECS  = 4     # seconds between detail requests
 # ──────────────────────────────────────────────────────────────────────────────
 
 BASE_URL            = "https://api.regulations.gov/v4"
@@ -61,26 +61,40 @@ def get_comment_details(comment_id, max_retries=5):
     url    = f"{BASE_URL}/comments/{comment_id}"
     params = {"include": "attachments"}
     for attempt in range(max_retries):
-        resp = requests.get(url, headers=HEADERS, params=params)
-        if resp.status_code == 200:
-            return resp.json(), resp.headers
-        elif resp.status_code == 429:
-            wait = 60 * (attempt + 1)
-            print(f"  Rate limited on {comment_id}. Waiting {wait}s (attempt {attempt+1}/{max_retries})...")
-            time.sleep(wait)
-        else:
-            print(f"  Failed to fetch {comment_id}: HTTP {resp.status_code}")
-            return {}, resp.headers
+        try:
+            resp = requests.get(url, headers=HEADERS, params=params)
+            if resp.status_code == 200:
+                return resp.json(), resp.headers
+            elif resp.status_code == 429:
+                wait = 60 * (attempt + 1)
+                print(f"  Rate limited on {comment_id}. Waiting {wait}s (attempt {attempt+1}/{max_retries})...")
+                time.sleep(wait)
+            else:
+                print(f"  Failed to fetch {comment_id}: HTTP {resp.status_code}")
+                return {}, resp.headers
+        except requests.exceptions.RequestException as e:
+            print(f"  Request error on {comment_id}: {e}")
+            return {}, {}
     print(f"  Gave up on {comment_id} after {max_retries} retries")
     return {}, {}
 
 def extract_attachment_urls(response_json):
+    if not response_json:
+        return None
     included = response_json.get("included", [])
+    if not included:
+        return None
     urls = []
     for inc in included:
+        if not isinstance(inc, dict):
+            continue
         if inc.get("type") == "attachments":
             file_formats = inc.get("attributes", {}).get("fileFormats", [])
+            if not file_formats:
+                continue
             for ff in file_formats:
+                if not isinstance(ff, dict):
+                    continue
                 url = ff.get("fileUrl")
                 if url:
                     urls.append(url)
@@ -102,17 +116,19 @@ if __name__ == "__main__":
 
     # ── Find resume point from existing output CSV ─────────────────────────────
     if os.path.exists(OUTPUT_CSV):
-        existing_df   = pd.read_csv(OUTPUT_CSV)
-        filled_rows   = existing_df[existing_df["Comment"].notna() & (existing_df["Comment"] != "")]
+        existing_df = pd.read_csv(OUTPUT_CSV)
+        filled_rows = existing_df[
+            existing_df["Comment"].notna() & (existing_df["Comment"] != "")
+        ]
         if not filled_rows.empty:
-            start_from_id = filled_rows["Comment ID"].iloc[-1]
+            start_from_id     = filled_rows["Comment ID"].iloc[-1]
+            detailed_comments = existing_df.to_dict("records")
             print(f"Resuming after comment ID: {start_from_id}")
             print(f"({len(filled_rows)} records already saved)")
-            # Seed the buffer with existing records so saves are cumulative
-            detailed_comments = existing_df.to_dict("records")
         else:
             start_from_id     = None
             detailed_comments = []
+            print("CSV exists but no filled rows found. Starting from beginning.")
     else:
         start_from_id     = None
         detailed_comments = []
@@ -142,16 +158,16 @@ if __name__ == "__main__":
             print(f"Warning: resume ID {start_from_id} not found. Starting from beginning.")
 
     # ── Fetch details ──────────────────────────────────────────────────────────
-    request_count  = 0
-    new_this_run   = 0
+    request_count = 0
+    new_this_run  = 0
 
     try:
         for c in tqdm(all_comments, desc="Fetching details", unit="comment"):
-            comment_id             = c.get("id")
+            comment_id                  = c.get("id")
             response_json, resp_headers = get_comment_details(comment_id)
-            detail                 = response_json.get("data", {})
-            attributes             = detail.get("attributes", {})
-            attachment_urls        = extract_attachment_urls(response_json)
+            detail                      = response_json.get("data", {}) if response_json else {}
+            attributes                  = detail.get("attributes", {}) if detail else {}
+            attachment_urls             = extract_attachment_urls(response_json)
 
             detailed_comments.append({
                 "Comment ID":           comment_id,
@@ -184,7 +200,7 @@ if __name__ == "__main__":
                 "Doc Abstract":         attributes.get("docAbstract"),
                 "Comment":              attributes.get("comment"),
                 "Attachment URLs":      attachment_urls,
-                "URL":                  detail.get("links", {}).get("self"),
+                "URL":                  detail.get("links", {}).get("self") if detail else None,
             })
 
             request_count += 1
