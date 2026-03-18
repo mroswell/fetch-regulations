@@ -35,8 +35,8 @@ pip install -r requirements.txt
 # Fetch comments from regulations.gov (requires REGULATIONS_API_KEY in .env)
 python scripts/fetch_regulations_comments.py
 
-# Run perspective analysis (requires ANTHROPIC_API_KEY in .env) — NOT YET CREATED
-python scripts/perspective_analysis.py
+# Run analysis to append perspective, tags, etc. (requires ANTHROPIC_API_KEY in .env)
+python scripts/append_fields.py
 
 # Convert CSV to JSON for website — NOT YET CREATED
 python scripts/csv_to_json.py
@@ -47,7 +47,7 @@ gh workflow run "Fetch Regulations.gov Comments"
 
 ## Current State
 - `scripts/fetch_regulations_comments.py` — exists, working
-- `scripts/perspective_analysis.py` — **planned, not yet created**
+- `scripts/append_fields.py` — exists, adds perspective/tags/vaccine_injured via Claude API
 - `scripts/csv_to_json.py` — **planned, not yet created**
 - `index.html` — **planned, not yet created**
 
@@ -65,7 +65,7 @@ committeecomments.com/
 │       └── fetch_regulations_comments.yml
 ├── scripts/
 │   ├── fetch_regulations_comments.py   ← fetches comments from regulations.gov
-│   ├── perspective_analysis.py            ← adds perspective/tags/etc to CSV
+│   ├── append_fields.py                   ← adds perspective/tags/etc to CSV
 │   └── csv_to_json.py                     ← converts CSV to JSON for website
 └── data/
     ├── csv/
@@ -137,7 +137,7 @@ doc_abstract, document_subtype, state_or_province, legacy_id, city,
 gov_agency, gov_agency_type, restrict_reason_type
 
 ## Website Filter Implications (CDC-2026-0199)
-- **Perspective filter** ✅ — added by perspective analysis script
+- **Perspective filter** ✅ — added by append_fields.py
 - **Vaccine injured filter** ✅ — separate flag, independent of perspective
 - **Has attachment filter** ✅ — 222 comments have attachments
 - **Org vs individual filter** ✅ — 69 comments have an organization
@@ -153,7 +153,7 @@ gov_agency, gov_agency_type, restrict_reason_type
 - `references`: "references" if comment contains citations/links to research, else empty
 - `duplicate`: "duplicate" if comment is a form letter or near-duplicate, else empty
 
-## Perspective Analysis Script (`scripts/perspective_analysis.py`)
+## Analysis Script (`scripts/append_fields.py`)
 
 ### Naming Convention
 We use the term "perspective" rather than "sentiment" for the classification
@@ -239,7 +239,7 @@ Available tags:
   replace `https://api.regulations.gov/v4/comments/` with `https://www.regulations.gov/comment/`
 - Replaces NaN with empty string
 - Writes to `data/json/comments_CDC-2026-0199.json`
-- Run after perspective analysis is complete
+- Run after append_fields.py is complete
 
 ## Data Pipeline
 ```
@@ -247,7 +247,7 @@ regulations.gov API
        ↓
 data/csv/comments_CDC-2026-0199.csv         (fetch script)
        ↓
-data/csv/comments_CDC-2026-0199.csv         (perspective_analysis.py adds columns in place)
+data/csv/comments_CDC-2026-0199.csv         (append_fields.py adds columns in place)
        ↓
 data/json/comments_CDC-2026-0199.json       (csv_to_json.py)
        ↓
@@ -266,7 +266,7 @@ A key goal is to surface patient stories.
 4. **Filter by vaccine injured** — show only comments with vaccine_injured flag
 5. **Filter by organization vs individual** — based on whether organization field is populated
 6. **Filter by has attachment** — based on whether attachment_urls field is populated
-7. **Filter by tags** — filter by topic tags assigned during perspective analysis
+7. **Filter by tags** — filter by topic tags assigned by append_fields.py
 8. **Find duplicates** — view comments flagged as duplicates grouped together
 9. **Find similar comments** — view comments grouped by similarity
 
@@ -312,7 +312,7 @@ This site is designed to eventually cover multiple ACIP and VRBPAC dockets.
 When adding a new docket:
 - Update `DOCKET_ID` in `scripts/fetch_regulations_comments.py`
 - Re-run the GitHub Actions workflow to fetch comments
-- Run perspective analysis on the new CSV
+- Run append_fields.py on the new CSV
 - Convert to JSON and add to `data/json/`
 - Update site navigation to include the new docket
 
