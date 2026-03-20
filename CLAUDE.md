@@ -48,7 +48,7 @@ gh workflow run "Fetch Regulations.gov Comments"
 ## Current State
 - `scripts/fetch_regulations_comments.py` — exists, working
 - `scripts/append_fields.py` — exists, adds perspective/tags/vaccine_injured via Claude API
-- `scripts/csv_to_json.py` — **planned, not yet created**
+- `scripts/csv_to_json.py` — exists, converts CSV to JSON for website
 - `index.html` — **planned, not yet created**
 
 ## Repository Structure

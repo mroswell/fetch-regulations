@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Committee Comments — CDC-2026-0199</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0" defer></script>
+  <script>
+    if (sessionStorage.getItem('cc-auth') !== 'ok') {
+      document.documentElement.classList.add('gated');
+    }
+  </script>
+</head>
+<body>
+  <div id="password-gate">
+    <div class="gate-box">
+      <h2>CommitteeComments.com</h2>
+      <p>Enter the password to continue.</p>
+      <input type="password" id="gate-password" placeholder="Password" autofocus>
+      <button id="gate-submit">Enter</button>
+      <p id="gate-error" hidden>Incorrect password.</p>
+    </div>
+  </div>
+
+  <div id="loading-overlay">
+    <div class="loader">
+      <div class="spinner"></div>
+      <p id="loading-text">Loading 2,441 comments…</p>
+    </div>
+  </div>
+
+  <header>
+    <div>
+      <h1>Committee Comments</h1>
+      <p class="subtitle">Public comments on ACIP docket <a href="https://www.regulations.gov/docket/CDC-2026-0199" target="_blank">CDC-2026-0199</a></p>
+    </div>
+    <nav><a href="about.html">About</a></nav>
+  </header>
+
+  <main>
+    <aside id="filters">
+      <button id="filter-toggle" aria-expanded="false" aria-controls="filter-panel">
+        Filters <span id="active-filter-count" hidden></span>
+      </button>
+
+      <div id="filter-panel">
+        <div class="filter-group">
+          <label for="search-input">Search</label>
+          <input type="search" id="search-input" placeholder="Search comments…" autocomplete="off">
+        </div>
+
+        <div class="filter-group">
+          <label for="name-input">Name</label>
+          <input type="search" id="name-input" placeholder="Search by name…" autocomplete="off">
+        </div>
+
+        <div class="filter-group">
+          <label for="perspective-select">Perspective</label>
+          <select id="perspective-select">
+            <option value="">All perspectives</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="vaccine-injured-check">
+            <span>Vaccine injured <span class="filter-count" id="injured-count"></span></span>
+          </label>
+        </div>
+
+        <div class="filter-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="attachment-check">
+            <span>Has attachment <span class="filter-count" id="attachment-count"></span></span>
+          </label>
+        </div>
+
+        <div class="filter-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="organization-check">
+            <span>Organization <span class="filter-count" id="organization-count"></span></span>
+          </label>
+        </div>
+
+        <div class="filter-group">
+          <label for="vaccine-select">Vaccine mentioned</label>
+          <select id="vaccine-select">
+            <option value="">All vaccines</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="tag-search">Tags</label>
+          <div class="tag-dropdown" id="tag-dropdown">
+            <input type="text" id="tag-search" placeholder="Search tags…" autocomplete="off">
+            <div class="selected-tags" id="selected-tags" hidden></div>
+            <div class="tag-list" id="tag-list" hidden></div>
+          </div>
+        </div>
+
+        <button id="clear-filters" class="clear-btn">Clear all filters</button>
+        <button id="clear-session" class="clear-btn dev-btn" onclick="sessionStorage.clear(); location.reload();">Reset preview login</button>
+      </div>
+    </aside>
+
+    <section id="results">
+      <div id="results-header">
+        <span id="results-count"></span>
+        <div id="sort-wrapper">
+          <label for="sort-select">Sort by</label>
+          <select id="sort-select">
+            <option value="date">Date (newest)</option>
+            <option value="date-asc">Date (oldest)</option>
+            <option value="relevance" disabled>Relevance</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="comment-cards"></div>
+
+      <nav id="pagination" aria-label="Pagination"></nav>
+    </section>
+  </main>
+
+  <script src="gate.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
