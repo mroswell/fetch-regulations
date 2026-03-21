@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact — Committee Comments</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .contact-form {
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        .contact-form h2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-form p.intro {
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: #fff;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #555;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-group .hint {
+            font-size: 0.82rem;
+            color: #777;
+            margin-top: 0.25rem;
+        }
+
+        button[type="submit"] {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 0.6rem 1.4rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background: #555;
+        }
+
+        .success-message {
+            display: none;
+            background: #f0faf0;
+            border: 1px solid #aaddaa;
+            border-radius: 4px;
+            padding: 1rem 1.2rem;
+            color: #2a6a2a;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div>
+            <h1><a href="index.html">Committee Comments</a></h1>
+            <p class="subtitle">Public comments on ACIP docket <a
+                    href="https://www.regulations.gov/docket/CDC-2026-0199" target="_blank">CDC-2026-0199</a></p>
+        </div>
+        <nav>
+            <a href="index.html">Comments</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main class="about-page">
+        <div class="contact-form">
+            <h2>Report an Issue</h2>
+            <p class="intro">
+                Found something wrong with the site? A broken filter, missing data, or display problem?
+                Use this form to let us know.
+            </p>
+
+            <form id="contact-form" action="https://formspree.io/f/maqpzjyz" method="POST">
+
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your name" />
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email <span style="color:#c00">*</span></label>
+                    <input type="email" id="email" name="email" required placeholder="you@example.com" />
+                    <span class="hint">Required so we can follow up if needed.</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Optional" />
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Description of the issue <span style="color:#c00">*</span></label>
+                    <textarea id="message" name="message" required
+                        placeholder="Please describe what you saw, what you expected, and what browser or device you were using."></textarea>
+                </div>
+
+                <!-- Honeypot spam field — hidden from real users -->
+                <input type="text" name="_gotcha" style="display:none" />
+
+                <button type="submit">Send Report</button>
+
+                <div class="success-message" id="success-msg">
+                    ✓ Thanks! Your report has been received.
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <script>
+        const form = document.getElementById('contact-form');
+        const successMsg = document.getElementById('success-msg');
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const data = new FormData(form);
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: data,
+                headers: { 'Accept': 'application/json' }
+            });
+            if (response.ok) {
+                form.reset();
+                successMsg.style.display = 'block';
+            } else {
+                alert('Something went wrong. Please try again or email us directly.');
+            }
+        });
+    </script>
+
+</body>
+
+</html>

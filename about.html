@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About — Committee Comments</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <header>
     <div>
       <h1><a href="index.html">Committee Comments</a></h1>
-      <p class="subtitle">Public comments on ACIP docket <a href="https://www.regulations.gov/docket/CDC-2026-0199" target="_blank">CDC-2026-0199</a></p>
+      <p class="subtitle">Public comments on ACIP docket <a href="https://www.regulations.gov/docket/CDC-2026-0199"
+          target="_blank">CDC-2026-0199</a></p>
     </div>
-    <nav><a href="index.html">Comments</a> <a href="about.html">About</a></nav>
+    <nav><a href="index.html">Comments</a> <a href="about.html">About</a><a href="contact.html">Contact</a>
+    </nav>
   </header>
 
   <main class="about-page">
@@ -20,105 +24,127 @@
       <h2>About This Project</h2>
 
       <p>CommitteeComments.com makes public comments submitted to federal advisory
-      committee dockets on <a href="https://www.regulations.gov" target="_blank">regulations.gov</a>
-      accessible, searchable, and analyzable for researchers, journalists, advocates,
-      and the general public.</p>
+        committee dockets on <a href="https://www.regulations.gov" target="_blank">regulations.gov</a>
+        accessible, searchable, and analyzable for researchers, journalists, advocates,
+        and the general public.</p>
 
       <p>The initial focus is docket
-      <a href="https://www.regulations.gov/docket/CDC-2026-0199" target="_blank">CDC-2026-0199</a>,
-      related to ACIP (Advisory Committee on Immunization Practices) and VRBPAC
-      (Vaccines and Related Biological Products Advisory Committee).</p>
+        <a href="https://www.regulations.gov/docket/CDC-2026-0199" target="_blank">CDC-2026-0199</a>,
+        related to ACIP (Advisory Committee on Immunization Practices) and VRBPAC
+        (Vaccines and Related Biological Products Advisory Committee).
+      </p>
 
       <p>A key design goal is to surface patient stories — comments from people who
-      were personally injured, or whose family member or friend was injured or died
-      following vaccination.</p>
+        were personally injured, or whose family member or friend was injured or died
+        following vaccination.</p>
 
       <h2>Data Source</h2>
 
       <p>All comments are fetched directly from the
-      <a href="https://open.gsa.gov/api/regulationsgov/" target="_blank">regulations.gov API</a>
-      using an automated pipeline. Comment text, metadata, and attachment URLs are
-      preserved exactly as submitted. No comments are excluded or modified.</p>
+        <a href="https://open.gsa.gov/api/regulationsgov/" target="_blank">regulations.gov API</a>
+        using an automated pipeline. Comment text, metadata, and attachment URLs are
+        preserved exactly as submitted. No comments are excluded or modified.
+      </p>
 
       <h2>Perspective Analysis</h2>
 
       <p>Each comment is analyzed using the Claude AI API to classify it along
-      several dimensions. We use the term <strong>"perspective"</strong> rather
-      than "sentiment" because commenters — particularly those describing vaccine
-      injuries — are expressing informed perspectives grounded in personal
-      experience, not merely emotional sentiment.</p>
+        several dimensions. We use the term <strong>"perspective"</strong> rather
+        than "sentiment" because commenters — particularly those describing vaccine
+        injuries — are expressing informed perspectives grounded in personal
+        experience, not merely emotional sentiment.</p>
 
       <h3>Perspective Labels</h3>
 
       <table class="about-table">
         <thead>
-          <tr><th>Label</th><th>Meaning</th></tr>
+          <tr>
+            <th>Label</th>
+            <th>Meaning</th>
+          </tr>
         </thead>
         <tbody>
-          <tr><td><span class="perspective-badge perspective-supportive">Supportive</span></td>
-              <td>Clearly and broadly supportive of vaccines</td></tr>
-          <tr><td><span class="perspective-badge perspective-mostly-supportive">Mostly supportive</span></td>
-              <td>Generally supportive but raises some concerns</td></tr>
-          <tr><td><span class="perspective-badge perspective-uncertain">Uncertain</span></td>
-              <td>Ambiguous or balanced</td></tr>
-          <tr><td><span class="perspective-badge perspective-vaccine-hesitant">Vaccine-hesitant</span></td>
-              <td>Raising safety concerns, calling for more transparency, or skeptical of vaccine policy</td></tr>
-          <tr><td><span class="perspective-badge perspective-mRNA-opposed">mRNA-opposed</span></td>
-              <td>Specifically opposed to mRNA or COVID vaccines, but not necessarily all vaccines</td></tr>
-          <tr><td><span class="perspective-badge perspective-broadly-opposed">Broadly opposed</span></td>
-              <td>Broadly opposed to vaccines in general</td></tr>
+          <tr>
+            <td><span class="perspective-badge perspective-supportive">Supportive</span></td>
+            <td>Clearly and broadly supportive of vaccines</td>
+          </tr>
+          <tr>
+            <td><span class="perspective-badge perspective-mostly-supportive">Mostly supportive</span></td>
+            <td>Generally supportive but raises some concerns</td>
+          </tr>
+          <tr>
+            <td><span class="perspective-badge perspective-uncertain">Uncertain</span></td>
+            <td>Ambiguous or balanced</td>
+          </tr>
+          <tr>
+            <td><span class="perspective-badge perspective-vaccine-hesitant">Vaccine-hesitant</span></td>
+            <td>Raising safety concerns, calling for more transparency, or skeptical of vaccine policy</td>
+          </tr>
+          <tr>
+            <td><span class="perspective-badge perspective-mRNA-opposed">mRNA-opposed</span></td>
+            <td>Specifically opposed to mRNA or COVID vaccines, but not necessarily all vaccines</td>
+          </tr>
+          <tr>
+            <td><span class="perspective-badge perspective-broadly-opposed">Broadly opposed</span></td>
+            <td>Broadly opposed to vaccines in general</td>
+          </tr>
         </tbody>
       </table>
 
-      <p>Many commenters who experienced vaccine injuries do not consider themselves
-      opposed to vaccines broadly. They may be pro-safety or pro-transparency.
-      These commenters are classified as "vaccine-hesitant." Comments specifically
-      opposing mRNA or COVID vaccines are classified as "mRNA-opposed," while
-      "broadly opposed" is reserved for comments opposing vaccines in general.</p>
+      <p>Some commenters who experienced vaccine injuries do not consider themselves
+        opposed to vaccines broadly. They may be pro-safety or pro-transparency.
+        These commenters are classified as "vaccine-hesitant." Comments specifically
+        opposing mRNA or COVID vaccines are classified as "mRNA-opposed," while
+        "broadly opposed" is reserved for comments opposing vaccines in general.</p>
+
+      <p>If you feel that your own comment was miscategorized, please
+        <a href="contact.html">let us know</a> and we will review it.</p>
 
       <h3>Vaccine Injured Flag</h3>
 
       <p>The <span class="injured-badge">Vaccine Injured</span> flag is
-      independent of perspective. It is set when a commenter describes a personal
-      experience of injury affecting themselves, or injury or death affecting a
-      family member or friend, following vaccination. It is not set when a
-      commenter merely acknowledges that rare adverse events exist as part of a
-      broader policy argument with no personal connection.</p>
+        independent of perspective. It is set when a commenter describes a personal
+        experience of injury affecting themselves, or injury or death affecting a
+        family member or friend, following vaccination. It is not set when a
+        commenter merely acknowledges that rare adverse events exist as part of a
+        broader policy argument with no personal connection.</p>
 
       <h3>Tags</h3>
 
       <p>Tags describe what each comment is about — neutrally and descriptively.
-      Tags are not used to editorialize or dismiss any commenter's perspective.
-      Vaccine injury is treated as a legitimate concern, not misinformation.</p>
+        Tags are not used to editorialize or dismiss any commenter's perspective.
+        Vaccine injury is treated as a legitimate concern, not misinformation.</p>
 
       <h3>Other Analysis Fields</h3>
 
       <ul>
         <li><strong>Vaccines mentioned</strong> — specific vaccines or vaccine types
-        referenced in the comment</li>
+          referenced in the comment</li>
         <li><strong>References</strong> — flagged if the comment contains citations,
-        links, or references to studies or research</li>
+          links, or references to studies or research</li>
         <li><strong>Duplicate</strong> — flagged if the comment appears to be a form
-        letter or near-identical to other submissions</li>
+          letter or near-identical to other submissions</li>
       </ul>
 
       <h2>Limitations</h2>
 
       <p>The perspective analysis is automated and imperfect. Individual
-      classifications may not capture the full nuance of a commenter's views.
-      The analysis is provided as a starting point for exploration, not as a
-      definitive categorization.</p>
+        classifications may not capture the full nuance of a commenter's views.
+        The analysis is provided as a starting point for exploration, not as a
+        definitive categorization.</p>
 
       <p>The "duplicate" flag uses a single-pass heuristic — it can identify
-      obvious form-letter language but may miss near-duplicates that use
-      different wording.</p>
+        obvious form-letter language but may miss near-duplicates that use
+        different wording.</p>
 
       <h2>Open Source</h2>
 
       <p>This project is open source. The code, data pipeline, and analysis
-      scripts are available on
-      <a href="https://github.com/mroswell/committeecomments.com" target="_blank">GitHub</a>.</p>
+        scripts are available on
+        <a href="https://github.com/mroswell/committeecomments.com" target="_blank">GitHub</a>.
+      </p>
     </article>
   </main>
 </body>
+
 </html>
