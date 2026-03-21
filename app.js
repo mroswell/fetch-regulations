@@ -404,6 +404,7 @@ function updateVaccineSelect(vacCounts) {
   $vaccineSelect.innerHTML = '<option value="">All vaccines</option>';
   for (const v of allVaccines) {
     const count = vacCounts[v.name] || 0;
+    if (count === 0) continue;
     const opt = document.createElement('option');
     opt.value = v.name;
     opt.textContent = `${v.name} (${count})`;
