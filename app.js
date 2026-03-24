@@ -514,7 +514,14 @@ function renderCard(r) {
     : '';
 
   card.innerHTML = `
-    <div class="card-header">${perspBadge} ${injuredBadge} ${dupBadge} <button class="share-btn" data-id="${escAttr(r.comment_id)}">Share this Comment</button></div>
+    <div class="card-header">
+      ${perspBadge} ${injuredBadge} ${dupBadge}
+      <span class="card-share-group">
+        <button class="share-btn share-link-btn" data-id="${escAttr(r.comment_id)}" title="Copy link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Share</button>
+        <a class="share-btn share-social-btn share-fb" data-id="${escAttr(r.comment_id)}" title="Share on Facebook" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        <a class="share-btn share-social-btn share-tw" data-id="${escAttr(r.comment_id)}" title="Share on X/Twitter" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      </span>
+    </div>
     <div class="card-meta">
       ${name ? `<strong>${escHtml(name)}</strong>` : ''}
       ${orgHtml}
@@ -525,19 +532,28 @@ function renderCard(r) {
     <div class="card-footer">${attachments} ${regLink}</div>
   `;
 
-  card.querySelector('.share-btn').addEventListener('click', (e) => {
+  const commentUrl = `${location.origin}${location.pathname}?id=${encodeURIComponent(r.comment_id)}`;
+  const shareText = 'I appreciate this comment to the (now disbanded) CDC Advisory Committee on Immunization Practices';
+
+  // Copy link button
+  card.querySelector('.share-link-btn').addEventListener('click', (e) => {
     const btn = e.currentTarget;
-    const id = btn.dataset.id;
-    const url = `${location.origin}${location.pathname}?id=${encodeURIComponent(id)}`;
-    navigator.clipboard.writeText(url).then(() => {
+    navigator.clipboard.writeText(commentUrl).then(() => {
+      const origHTML = btn.innerHTML;
       btn.textContent = 'Copied to clipboard!';
       btn.classList.add('copied');
       setTimeout(() => {
-        btn.textContent = 'Share this Comment';
+        btn.innerHTML = origHTML;
         btn.classList.remove('copied');
       }, 2500);
     });
   });
+
+  // Set social share URLs
+  const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(commentUrl)}&quote=${encodeURIComponent(shareText)}`;
+  const twUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(commentUrl)}`;
+  card.querySelector('.share-fb').href = fbUrl;
+  card.querySelector('.share-tw').href = twUrl;
 
   return card;
 }

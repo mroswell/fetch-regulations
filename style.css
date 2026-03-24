@@ -54,8 +54,9 @@ header h1 { font-size: 1.5rem; font-weight: 700; }
 header h1 a { color: inherit; }
 header h1 a:hover { text-decoration: none; }
 .subtitle { color: #555; font-size: 0.9rem; }
-header nav { font-size: 0.9rem; }
-header nav a { margin-left: 1rem; }
+header nav { font-size: 0.9rem; display: flex; align-items: center; gap: 0.75rem; }
+.social-icon { color: #555; display: inline-flex; align-items: center; }
+.social-icon:hover { color: #2171b5; text-decoration: none; }
 
 /* === Main Layout === */
 main {
@@ -241,8 +242,11 @@ main {
   gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
-.card-header .share-btn {
+.card-share-group {
   margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
   flex-shrink: 0;
 }
 
@@ -338,15 +342,20 @@ main {
   background: #f0f4f8;
   border: none;
   border-radius: 4px;
-  padding: 0.45rem 1rem;
+  padding: 0.4rem 0.7rem;
   font-size: 0.8rem;
   cursor: pointer;
   color: #2171b5;
   font-weight: 500;
-  margin-left: auto;
   transition: background 0.2s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  text-decoration: none;
 }
-.share-btn:hover { background: #dce8f2; }
+.share-btn:hover { background: #dce8f2; text-decoration: none; }
+.share-social-btn { padding: 0.4rem; color: #555; }
+.share-social-btn:hover { color: #2171b5; }
 .share-btn.copied {
   background: #41ab5d;
   color: #fff;
