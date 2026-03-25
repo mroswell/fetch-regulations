@@ -293,7 +293,9 @@ function computeCounts(records) {
 // === Rendering ===
 function onFilterChange() {
   state.page = 1;
+  const scrollY = window.scrollY;
   render();
+  window.scrollTo(0, scrollY);
 }
 
 function render() {
