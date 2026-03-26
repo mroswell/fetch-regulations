@@ -1,0 +1,47 @@
+name: Fetch Comments — CDC-2025-0454 (ACIP Sep 2025)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-comments:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests pandas tqdm
+
+      - name: Run script
+        env:
+          REGULATIONS_API_KEY: ${{ secrets.REGULATIONS_API_KEY }}
+          DOCKET_ID: CDC-2025-0454
+        run: python scripts/fetch_regulations_comments.py
+
+      - name: Upload CSV as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: comments-CDC-2025-0454
+          path: data/csv/comments_CDC-2025-0454.csv
+
+      - name: Commit CSV to repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase
+          git add data/csv/comments_CDC-2025-0454.csv
+          git diff --staged --quiet || git commit -m "Fetch comments for CDC-2025-0454 [skip ci]"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
