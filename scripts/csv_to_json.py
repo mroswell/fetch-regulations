@@ -4,8 +4,9 @@ import json
 
 # ── Settings ──────────────────────────────────────────────────────────────────
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CSV_PATH = os.path.join(REPO_ROOT, "data", "csv", "comments_CDC-2026-0199.csv")
-JSON_PATH = os.path.join(REPO_ROOT, "data", "json", "comments_CDC-2026-0199.json")
+DOCKET_ID = os.environ.get("DOCKET_ID", "CDC-2026-0199")
+CSV_PATH = os.path.join(REPO_ROOT, "data", "csv", f"comments_{DOCKET_ID}.csv")
+JSON_PATH = os.path.join(REPO_ROOT, "data", "json", f"comments_{DOCKET_ID}.json")
 
 API_URL_PREFIX = "https://api.regulations.gov/v4/comments/"
 HUMAN_URL_PREFIX = "https://www.regulations.gov/comment/"

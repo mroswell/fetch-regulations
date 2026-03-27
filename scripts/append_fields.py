@@ -10,7 +10,8 @@ load_dotenv()
 
 # ── Settings ──────────────────────────────────────────────────────────────────
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CSV_PATH = os.path.join(REPO_ROOT, "data", "csv", "comments_CDC-2026-0199.csv")
+DOCKET_ID = os.environ.get("DOCKET_ID", "CDC-2026-0199")
+CSV_PATH = os.path.join(REPO_ROOT, "data", "csv", f"comments_{DOCKET_ID}.csv")
 SAVE_EVERY = 20
 SLEEP_SECS = 3
 MODEL = "claude-sonnet-4-20250514"

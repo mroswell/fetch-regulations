@@ -5,9 +5,10 @@ from tqdm import tqdm
 import time
 
 # ── Settings ──────────────────────────────────────────────────────────────────
-DOCKET_ID   = os.environ.get("DOCKET_ID", "CDC-2026-0199")
-SAVE_EVERY  = 20   # save progress every N comments
-SLEEP_SECS  = 4     # seconds between detail requests
+DOCKET_ID    = os.environ.get("DOCKET_ID", "CDC-2026-0199")
+SAVE_EVERY   = 20    # save progress every N comments
+SLEEP_SECS   = 4     # seconds between detail requests
+MAX_MINUTES  = int(os.environ.get("MAX_MINUTES", "0"))  # 0 = no limit
 # ──────────────────────────────────────────────────────────────────────────────
 
 BASE_URL            = "https://api.regulations.gov/v4"
@@ -114,7 +115,10 @@ if __name__ == "__main__":
     print(f"Output:     {OUTPUT_CSV}")
     print(f"Pace:       {SLEEP_SECS}s between requests (~{3600//SLEEP_SECS}/hour)")
     print(f"Auto-save:  every {SAVE_EVERY} comments")
+    print(f"Time limit: {MAX_MINUTES} minutes" if MAX_MINUTES else "Time limit: none")
     print(f"{'='*60}\n")
+
+    start_time = time.time()
 
     # ── Find resume point from existing output CSV ─────────────────────────────
     if os.path.exists(OUTPUT_CSV):
@@ -220,6 +224,13 @@ if __name__ == "__main__":
             # ── Periodic save ──────────────────────────────────────────────────
             if new_this_run % SAVE_EVERY == 0:
                 save_progress(detailed_comments, OUTPUT_CSV)
+
+            # ── Time limit check ──────────────────────────────────────────────
+            if MAX_MINUTES > 0:
+                elapsed = (time.time() - start_time) / 60
+                if elapsed >= MAX_MINUTES:
+                    print(f"\n  Time limit reached ({MAX_MINUTES} minutes). Saving and exiting.")
+                    break
 
             time.sleep(SLEEP_SECS)
 
